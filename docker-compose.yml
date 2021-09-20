@@ -1,0 +1,19 @@
+version: '3'
+services:
+  server:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    volumes:
+      - .:/syllabus
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    volumes:
+      - "./mysql/db-data/:/var/lib/mysql"
+      - "./mysql/my.cnf:/etc/mysql/conf.d/my.cnf" #データで日本語を使うために必要
