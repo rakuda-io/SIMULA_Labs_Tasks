@@ -1,6 +1,6 @@
 version: '3'
 services:
-  server:
+  app:
     build: .
     ports:
       - "3000:3000"
@@ -9,6 +9,7 @@ services:
     volumes:
       - .:/syllabus
   mysql:
+    platform: linux/x86_64 #M1チップ対応のためプラットフォームを指定
     image: mysql:5.7
     ports:
       - "3306:3306"
