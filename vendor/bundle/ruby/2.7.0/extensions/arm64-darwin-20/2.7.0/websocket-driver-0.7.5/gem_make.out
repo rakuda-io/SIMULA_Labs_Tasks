@@ -1,0 +1,15 @@
+current directory: /Users/yukikubota/dev/SIMULA_Labs_Tasks/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+/Users/yukikubota/.rbenv/versions/2.7.2/bin/ruby -I /Users/yukikubota/.rbenv/versions/2.7.2/lib/ruby/2.7.0 -r ./siteconf20210921-34297-10kdrk1.rb extconf.rb
+creating Makefile
+
+current directory: /Users/yukikubota/dev/SIMULA_Labs_Tasks/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make "DESTDIR=" clean
+
+current directory: /Users/yukikubota/dev/SIMULA_Labs_Tasks/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make "DESTDIR="
+compiling websocket_mask.c
+linking shared-object websocket_mask.bundle
+
+current directory: /Users/yukikubota/dev/SIMULA_Labs_Tasks/vendor/bundle/ruby/2.7.0/gems/websocket-driver-0.7.5/ext/websocket-driver
+make "DESTDIR=" install
+/opt/homebrew/bin/ginstall -c -m 0755 websocket_mask.bundle ./.gem.20210921-34297-ne49a3
