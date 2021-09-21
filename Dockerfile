@@ -7,5 +7,3 @@ WORKDIR /syllabus
 COPY Gemfile /syllabus/
 COPY Gemfile.lock /syllabus/
 RUN bundle install
-
-COPY / /syllabus/
