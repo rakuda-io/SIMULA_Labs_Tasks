@@ -1,5 +1,5 @@
-# module Api
-#   module V1
+module Api
+  module V1
     class SubjectsController < ApplicationController
       #基本7アクションは必要であれば適宜実装
 
@@ -48,5 +48,5 @@
         }, status: :ok
       end
     end
-#   end
-# end
+  end
+end
