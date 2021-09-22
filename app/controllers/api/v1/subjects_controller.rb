@@ -6,12 +6,15 @@ module Api
       #定義元はSubjectモデル内に記載
       def search
         #keyword無しでのリクエストはエラー文を出して早期リターンさせる
-        return render json: "ERROR：〜/search/?keyword=◯◯の形式で◯◯に検索語句を入力してリクエストを送ってください" if params[:keyword].nil?
+        return render json: "●ERROR●：〜/search/?keyword=◯◯の形式で◯◯に検索語句を含めてリクエストを送ってください" if params[:keyword].nil?
 
         #リクエストを「keyword」として受け取ってSubjectモデルで定義したsearchメソッドで検索
         subject_arrays = Subject.search(params[:keyword])
         teacher_arrays = Teacher.all
         lecture_arrays = Lecture.all
+
+        #検索条件に該当がない場合は早期リターンさせる
+        return render json: "該当する授業はありません" if subject_arrays.empty?
 
         @results = [] #json形式にした最終出力を収納
         lectures_json = [] #lectureを指定のjson形式にしたものを収納
@@ -46,9 +49,18 @@ module Api
           @results << json_format_array_datas
         end
 
-        render json: {
-          subjects: @results
-        }, status: :ok
+        #最終のjson出力はkeywordが空白だった場合は全データを出力するので注意文を記載
+        if params[:keyword] == ""
+          render json: {
+            ●WARNING●: "keywordが空白だったため全データを出力しています",
+            subjects: @results
+          }, status: :ok
+        else
+          render json: {
+            subjects: @results
+          }, status: :ok
+        end
+
       end
     end
   end
