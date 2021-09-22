@@ -17,3 +17,8 @@ docker-composeを用いたRailsのAPIサーバー環境構築
 　https://qiita.com/Teach/items/69a1e43562c0682b6777
 Dockerにおけるボリュームのマウント
 　https://logicoffee.hatenablog.com/entry/2018/06/21/123025
+主キーのカラム名を id 以外に変更する方法
+  https://walktan.hatenablog.com/entry/2016/08/22/005927
+CLUD基本アクション以外の定義
+  https://qiita.com/kouhei_matuura/items/1660e0f709aa95de168d
+  
