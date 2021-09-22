@@ -21,4 +21,5 @@ Dockerにおけるボリュームのマウント
   https://walktan.hatenablog.com/entry/2016/08/22/005927
 CLUD基本アクション以外の定義
   https://qiita.com/kouhei_matuura/items/1660e0f709aa95de168d
-  
+nil? empty? blank? present? の使い分け
+  https://qiita.com/somewhatgood@github/items/b74107480ee3821784e6

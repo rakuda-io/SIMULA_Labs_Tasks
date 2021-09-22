@@ -11,31 +11,30 @@ module Api
         #リクエストを「keyword」として受け取ってSubjectモデルで定義したsearchメソッドで検索
         subject_arrays = Subject.search(params[:keyword])
         teacher_arrays = Teacher.all
-        lecture_arrays = Lecture.all
-
+        lecture_arrays = Lecture.all.order(date: :asc) #lectureの日付を昇順にソート
         #検索条件に該当がない場合は早期リターンさせる
         return render json: "該当する授業はありません" if subject_arrays.empty?
 
         @results = [] #json形式にした最終出力を収納
-        lectures_json = [] #lectureを指定のjson形式にしたものを収納
 
         #subjectのIDにマッチしたものをピックアップ
         subject_arrays.each do |sub_array|
           teacher_matched_subject = teacher_arrays.find_by(teacher_id: sub_array.teacher_id)
           lectures_matched_subject = lecture_arrays.where(subject_id: sub_array.subject_id)
+          lectures = [] #lectureを指定のjson形式にしたものを収納
 
           #lecture_matched_subjectの配列全てを指定のjson形式にする
-          lecture_json_format_arrays = lectures_matched_subject.each do |lec|
+          lectures_matched_subject.each do |lec|
             lecture_data = {
               id: lec.lecture_id,
               title: lec.title,
               date: lec.date,
             }
-            lectures_json << lecture_data
+            lectures << lecture_data
           end
 
           #subjectとteacherも指定のjson形式にして先程のlecture配列も合わせて@resultに収納
-          json_format_array_datas = {
+          json_format_datas = {
             id: sub_array.subject_id,
             title: sub_array.title,
             weekday: sub_array.weekday,
@@ -44,9 +43,9 @@ module Api
               id: teacher_matched_subject.teacher_id,
               name: teacher_matched_subject.name,
             },
-            lectures: lecture_json_format_arrays
+            lectures: lectures
           }
-          @results << json_format_array_datas
+          @results << json_format_datas
         end
 
         #最終のjson出力はkeywordが空白だった場合は全データを出力するので注意文を記載
