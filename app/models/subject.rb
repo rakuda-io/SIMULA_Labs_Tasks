@@ -4,7 +4,6 @@ class Subject < ApplicationRecord
   validates :subject_id, presence: true, uniqueness: true
 
   def self.search(keyword)
-    # "パラメーターに検索語句を入力してください" unless :keyword
-    Subject.where("title LIKE ?", "%#{keyword}%")
+    Subject.where("title LIKE (?)", "%#{keyword}%")
   end
 end
