@@ -44,6 +44,8 @@ CLUD基本アクション以外の定義
   https://qiita.com/kouhei_matuura/items/1660e0f709aa95de168d
 nil? empty? blank? present? の使い分け
   https://qiita.com/somewhatgood@github/items/b74107480ee3821784e6
+warning: URI.encode is obsoleteエラーの直し方
+  https://qiita.com/oieioi/items/1ad0ded08f250c798d68
 
 
 ###### Twitterアカウント　@rakuda_io
