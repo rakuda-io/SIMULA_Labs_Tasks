@@ -4,6 +4,6 @@ class Subject < ApplicationRecord
   validates :subject_id, presence: true, uniqueness: true
 
   def self.search(keyword)
-    Subject.where("title LIKE (?)", "%#{keyword}%")
+    Subject.where("title LIKE ?", "%#{keyword}%")
   end
 end

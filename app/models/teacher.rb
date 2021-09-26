@@ -3,6 +3,6 @@ class Teacher < ApplicationRecord
   validates :teacher_id, presence: true, uniqueness: true
 
   def self.search(keyword)
-    Teacher.where("name LIKE (?)", "%#{keyword}%")
+    Teacher.where("name LIKE ?", "%#{keyword}%")
   end
 end
