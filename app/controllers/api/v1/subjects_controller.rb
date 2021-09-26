@@ -5,11 +5,11 @@ module Api
 
         #リクエストエラーの早期リターンパターン
         if params[:keyword].nil?
-          return render status: 400,
-          json: "●WARNING●: \r\n リクエストが間違っています。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
+          return render status: 404,
+          json: "●404 Not Found●: \r\n リクエストが間違っています。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
         elsif params[:keyword] == ""
-          return render status: 400,
-          json: "●WARNING●: \r\n keywordが空白です。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
+          return render status: 404,
+          json: "●404 Not Found●: \r\n keywordが空白です。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
         end
 
         #リクエストを「keyword」として受け取ってsearchメソッドで検索処理をかけ各配列に収納
