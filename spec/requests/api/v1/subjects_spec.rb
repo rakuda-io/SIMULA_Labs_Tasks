@@ -13,9 +13,11 @@ RSpec.describe '#search' do
         no_hit_url = '/api/v1/subjects?keyword=' + URI.encode_www_form_component('殺せんせー')
         get no_hit_url
       end
+
       it '検索結果がないと返すこと' do
         expect(response.body).to eq("該当する科目はありません")
       end
+
       it 'ステータスコードが200であること' do
         expect(response).to have_http_status(200)
       end
@@ -29,13 +31,16 @@ RSpec.describe '#search' do
         @one_hit_res = JSON.parse(Net::HTTP.get(URI.parse(@one_hit_data_url)))
         @two_hits_res = JSON.parse(Net::HTTP.get(URI.parse(@two_hits_data_url)))
       end
+
       it '該当するデータが1個の場合、1個のデータを返すこと' do
         expect(@one_hit_res['subjects'][0]['title']).to eq("悪霊・鬼の倒し方実践講座")
       end
+
       it '該当するデータが2個の場合、2個のデータを返すこと' do
         expect(@two_hits_res['subjects'][0]['title']).to eq("グレートなティーチャーになるための教育論講座")
         expect(@two_hits_res['subjects'][1]['title']).to eq("悪霊・鬼の倒し方実践講座")
       end
+
       it 'ステータスコードが200であること' do
         get @one_hit_data_url
         expect(response).to have_http_status(200)
@@ -52,24 +57,38 @@ RSpec.describe '#search' do
         @one_hit_res = JSON.parse(Net::HTTP.get(URI.parse(@one_hit_data_url)))
         @two_hits_res = JSON.parse(Net::HTTP.get(URI.parse(@two_hits_data_url)))
       end
-      it '該当するデータが1個の場合、1個のデータを返すこと' do
-        expect(@one_hit_res['subjects'][0]['teacher']['name']).to eq("鬼塚先生")
+
+      context '該当するデータが1個の場合' do
+        it '1個のデータを返すこと' do
+          expect(@one_hit_res['subjects'][0]['teacher']['name']).to eq("鬼塚先生")
+        end
+
+        it 'ステータスコードが200であること' do
+          get @one_hit_data_url
+          expect(response).to have_http_status(200)
+        end
+
+        it 'Lectureが開講年月日(date)において昇順にソートされていること' do
+          lectures = @one_hit_res['subjects'][0]['lectures'].map {|l| l['date']}
+          expect(lectures).to eq(["2021-04-12", "2021-04-19"])
+        end
       end
-      it '該当するデータが2個の場合、2個のデータを返すこと' do
-        expect(@two_hits_res['subjects'][0]['teacher']['name']).to eq("鬼塚先生")
-        expect(@two_hits_res['subjects'][2]['teacher']['name']).to eq("鵺野先生")  #######あとで2->1直す
-      end
-      it 'ステータスコードが200であること' do
-        get @one_hit_data_url
-        expect(response).to have_http_status(200)
-        get @two_hits_data_url
-        expect(response).to have_http_status(200)
-      end
-      it 'Lectureの開講年月日(date)において昇順にソートされていること' do
-        lectures = @one_hit_res['subjects'][0]['lectures'].map {|l| l['date']}
-        expect(lectures).to eq(["2021-04-12", "2021-04-19"])
-        lectures = @two_hits_res['subjects'][0]['lectures'].map {|l| l['date']}
-        expect(lectures).to eq(["2021-04-12", "2021-04-19"])
+
+      context '該当するデータが2個の場合' do
+        it '2個のデータを返すこと' do
+          expect(@two_hits_res['subjects'][0]['teacher']['name']).to eq("鬼塚先生")
+          expect(@two_hits_res['subjects'][2]['teacher']['name']).to eq("鵺野先生")  #######あとで2->1直す
+        end
+
+        it 'ステータスコードが200であること' do
+          get @two_hits_data_url
+          expect(response).to have_http_status(200)
+        end
+
+        it 'Lectureの開講年月日(date)において昇順にソートされていること' do
+          lectures = @two_hits_res['subjects'][0]['lectures'].map {|l| l['date']}
+          expect(lectures).to eq(["2021-04-12", "2021-04-19"])
+        end
       end
     end
 
