@@ -1,20 +1,16 @@
 module Api
   module V1
     class SubjectsController < ApplicationController
-      def search #searchアクションの定義元はSubjectモデル・Teacherモデル内にそれぞれ記載
-
+      def search
         #リクエストエラーの早期リターンパターン
-        if params[:keyword].nil?
+        if params[:keyword].nil? || params[:teacher_name].nil?
           return render status: 404,
           json: "●404 Not Found●: \r\n リクエストが間違っています。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
-        elsif params[:keyword] == ""
-          return render status: 404,
-          json: "●404 Not Found●: \r\n keywordが空白です。\r\n\r\n  localhost:3000/api/v1/subjects?keyword=◯◯ \r\n の形式で◯◯に検索語句を含めてリクエストを送ってください"
         end
 
         #リクエストを「keyword」として受け取ってsearchメソッドで検索処理をかけ各配列に収納
-        subject_arrays = Subject.search(params[:keyword])
-        teacher_arrays = Teacher.search(params[:keyword])
+        subject_arrays = Subject.title_search(params[:keyword])
+        teacher_arrays = Teacher.name_search(params[:teacher_name])
         lecture_arrays = Lecture.all.order(date: :asc) #lectureの日付を昇順にソート
 
         #最終結果を収納する配列を用意
@@ -71,7 +67,7 @@ module Api
                 }
               end
 
-              #SubjectとTeacherも指定のjson形式にして先程のjson形式にしたlecturesも合わせた配列を収納
+              #SubjectとTeacherも指定のjson形式にしてlecturesも合わせた配列をjson_format_datasに収納
               json_format_datas << {
                 id: smt.subject_id,
                 title: smt.title,
@@ -102,7 +98,7 @@ module Api
               }
             end
 
-            #SubjectとTeacherも指定のjson形式にして先程のjson形式にしたlecturesも合わせた配列を収納
+            #SubjectとTeacherも指定のjson形式にしてlecturesも合わせた配列をjson_format_datasに収納
             json_format_datas << {
               id: sub_data.subject_id,
               title: sub_data.title,
@@ -152,9 +148,17 @@ module Api
           json: "●Unexpected Error●: \r\n 想定外のエラー \r\n\r\n API制作担当にご連絡ください。 \r\n 連絡先：090-xxxx-xxxx"
         end
 
-        #各ケースで保存したjsonデータをrenderで表示
+        #各ケースで保存したjsonデータを重複のみ（AND検索）にしてresに代入
+        res = json_format_datas.select{ |data| json_format_datas.count(data) > 1}.uniq
+
+        #上記のAND検索の結果resが空なら該当科目なしとする
+        if res.empty?
+          return render status: 200,
+          json: "該当する科目はありません"
+        end
+
         render json: {
-          subjects: json_format_datas
+          subjects: res
         }, status: :ok
 
       end

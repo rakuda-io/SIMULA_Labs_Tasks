@@ -3,7 +3,7 @@ class Subject < ApplicationRecord
   belongs_to :teacher
   validates :subject_id, presence: true, uniqueness: true
 
-  def self.search(keyword)
+  def self.title_search(keyword)
     Subject.where("title LIKE ?", "%#{keyword}%")
   end
 end
